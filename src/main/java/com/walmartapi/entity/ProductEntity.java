@@ -3,7 +3,7 @@ package com.walmartapi.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
+@Entity //reoresentacion de una tabla en una base de datos
 @Table(name = "products")
 @Data
 public class ProductEntity {
