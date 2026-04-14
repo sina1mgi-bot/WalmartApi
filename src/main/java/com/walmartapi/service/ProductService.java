@@ -6,9 +6,6 @@ import com.walmartapi.manager.CustomObjectMapper;
 import com.walmartapi.model.Product;
 import com.walmartapi.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -52,10 +49,44 @@ public class ProductService {
         return productMapper.mapToDto(product.get()); //si llega a ser null lanzsaría una NullPointException
     }
 
-    @DeleteMapping()
-    public Product deleteProduct(){
-        productRepository.deleteById();
+    public Product updateProduct(Long id, Product product) {
+
+        // Buscar el producto existente en la BD
+        Optional<ProductEntity> existingProduct = productRepository.findById(id);
+
+        if (existingProduct.isEmpty()) {
+            throw new NotFound("Product not found.");
+        }
+        ProductEntity productToUpdate = existingProduct.get();
+
+        // Actualización prcial, no siemore se requiere actualzar todos los campos
+        if (product.getName() != null) {
+            productToUpdate.setName(product.getName());
+        }
+
+        if (product.getDescription() != null) {
+            productToUpdate.setDescription(product.getDescription());
+        }
+        if (product.getPrice() != null) {
+            productToUpdate.setPrice(product.getPrice());
+        }
+        //guardamos los cambios
+        ProductEntity updatedProduct = productRepository.save(productToUpdate);
+        //mapear a dto
+        return productMapper.mapToDto(updatedProduct);
     }
+
+    public void deleteProduct(Long id) {
+        Optional<ProductEntity> existingProduct = productRepository.findById(id);
+
+        if (existingProduct.isEmpty()) {
+            throw new NotFound("Product not found.");
+        }
+
+        productRepository.deleteById(id);
+    }
+
+
 
 
 }
