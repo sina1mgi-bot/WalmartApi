@@ -10,7 +10,6 @@ public class ProductMapper implements CustomObjectMapper<ProductEntity, Product>
     //Dto es una clase que solo mueve información a través de las capas
     //Dao los objetos que se conectan a la base de datos
 
-
     @Override
     public ProductEntity mapToEntity(Product dto) {
         ProductEntity productEntity = new ProductEntity();
